@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Generar QR — Archivo de objetos</title>
+  <style>
+    body{font-family:system-ui,sans-serif;background:#f6f2ea;color:#2d2a25;margin:0;padding:30px}
+    main{max-width:700px;margin:auto;background:#fffdf8;border:1px solid #ddd5c8;border-radius:16px;padding:28px}
+    input{width:100%;padding:12px;border:1px solid #cfc5b6;border-radius:8px;box-sizing:border-box}
+    button{margin-top:12px;padding:12px 16px;border:0;border-radius:8px;background:#6b4f32;color:white;cursor:pointer}
+    #qrcode{margin-top:24px;text-align:center}
+    #qrcode img{max-width:100%}
+    .hint{color:#6f685f}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Generar el QR del archivo</h1>
+  <p class="hint">Introduce la URL pública de tu página principal después de publicarla.</p>
+  <label for="url">URL</label>
+  <input id="url" type="url" placeholder="https://tu-sitio.example.com/">
+  <button id="generate">Generar QR</button>
+  <div id="qrcode"></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  document.getElementById('generate').onclick = () => {
+    const url = document.getElementById('url').value.trim();
+    if (!/^https?:\/\//i.test(url)) return alert('Introduce una URL pública válida.');
+    const box = document.getElementById('qrcode');
+    box.innerHTML = '';
+    new QRCode(box, { text: url, width: 280, height: 280, correctLevel: QRCode.CorrectLevel.H });
+  };
+</script>
+</body>
+</html>

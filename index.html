@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Archivo colaborativo de objetos y memorias.">
+  <title>Archivo de objetos y memorias</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div>
+        <p class="eyebrow">ARCHIVO COLABORATIVO</p>
+        <h1>Objetos y memorias</h1>
+        <p class="subtitle">Conserva la historia de un objeto y compártela con la comunidad.</p>
+      </div>
+      <nav class="tabs" aria-label="Secciones">
+        <button class="tab active" data-view="submit">Añadir objeto</button>
+        <button class="tab" data-view="archive">Archivo</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="view-submit" class="view active-view">
+      <div class="card intro-card">
+        <h2>Registrar un objeto</h2>
+        <p>Completa los tres campos. La fotografía y la memoria quedarán asociadas a la fecha y al lugar indicados.</p>
+      </div>
+
+      <form id="object-form" class="card form-card">
+        <div class="field-group">
+          <div class="field-number">1</div>
+          <div class="field-content">
+            <label for="photo">Fotografía del objeto</label>
+            <p class="hint">JPG, PNG o WEBP. Máximo 8 MB.</p>
+            <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required>
+            <div id="photo-preview" class="photo-preview hidden"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-number">2</div>
+          <div class="field-content">
+            <label for="memory">Historia o memoria del objeto</label>
+            <p class="hint">Puedes escribirla aquí o cargar un archivo de texto (.txt o .md).</p>
+            <textarea id="memory" name="memory" rows="9" maxlength="10000" placeholder="¿Qué es el objeto? ¿De quién era? ¿Qué recuerdas de él?" required></textarea>
+            <div class="inline-row">
+              <label class="file-button" for="memory-file">Cargar texto</label>
+              <input id="memory-file" class="visually-hidden" type="file" accept=".txt,.md,text/plain,text/markdown">
+              <span id="memory-file-name" class="hint"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-number">3</div>
+          <div class="field-content">
+            <label>Lugar y fecha</label>
+            <div class="two-columns">
+              <div>
+                <label class="sub-label" for="place">Lugar</label>
+                <input id="place" name="place" type="text" maxlength="200" placeholder="Ej. Centro Habana" required>
+              </div>
+              <div>
+                <label class="sub-label" for="memory-date">Fecha</label>
+                <input id="memory-date" name="memory-date" type="date" required>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit" id="submit-button">Guardar en el archivo</button>
+          <span id="form-status" class="status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </section>
+
+    <section id="view-archive" class="view" hidden>
+      <div class="archive-heading">
+        <div>
+          <h2>Archivo de objetos</h2>
+          <p id="archive-count" class="hint">Cargando...</p>
+        </div>
+        <div class="search-box">
+          <label class="visually-hidden" for="search">Buscar</label>
+          <input id="search" type="search" placeholder="Buscar por objeto, lugar o memoria...">
+        </div>
+      </div>
+      <div id="gallery" class="gallery" aria-live="polite"></div>
+      <div id="empty-state" class="card empty-state hidden">
+        <h3>Aún no hay objetos archivados</h3>
+        <p>Cuando alguien complete el formulario, aparecerá aquí.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">Archivo de objetos y memorias</div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
