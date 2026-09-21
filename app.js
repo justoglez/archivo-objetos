@@ -302,6 +302,7 @@ function renderArchive() {
     const img = document.createElement('img'); img.className = 'object-image'; img.src = item.photo_url; img.alt = `${t('publicPhotoAlt')}: ${item.place}`; img.loading = 'lazy';
     const body = document.createElement('div'); body.className = 'object-body';
     const meta = document.createElement('div'); meta.className = 'object-date-place'; meta.textContent = `${item.place} · ${formatDate(item.memory_date)}`;
+    const title = document.createElement('h3'); title.textContent = t('memoryTitle');
     const text = document.createElement('p'); text.className = 'object-memory'; text.textContent = item.memory;
     const controls = document.createElement('div'); controls.className = 'object-controls';
     const ownership = document.createElement('span'); ownership.className = 'ownership-badge';
