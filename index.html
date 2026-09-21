@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Archivo colaborativo de objetos y memorias.">
+  <meta name="description" content="Collaborative archive of objects and memories.">
   <title>Objetos y memorias</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,20 +14,19 @@
         <div>
           <p class="eyebrow" data-i18n="eyebrow">ARCHIVO COLABORATIVO</p>
           <h1 data-i18n="title">Objetos y memorias</h1>
-          <p class="subtitle" data-i18n="subtitle">Conserva la historia de un objeto y compártela con la comunidad.</p>
+          <p class="subtitle" data-i18n="subtitle">Preserve the story of an object and share it with the community.</p>
         </div>
         <div class="header-tools">
-          <div class="language-switcher" aria-label="Idioma">
-            <button type="button" class="language-button active" data-lang="es">ES</button>
-            <button type="button" class="language-button" data-lang="en">EN</button>
+          <div class="language-switcher" aria-label="Language">
+            <button type="button" class="language-button active" data-lang="en">EN</button>
             <button type="button" class="language-button" data-lang="de">DE</button>
           </div>
-          <button type="button" class="admin-link" id="admin-open" data-i18n="adminAccess">Administración</button>
+          <button type="button" class="admin-link" id="admin-open" data-i18n="adminAccess">Administration</button>
         </div>
       </div>
       <nav class="tabs" aria-label="Secciones">
-        <button type="button" class="tab active" data-view="submit" data-i18n="tabAdd">Añadir objeto</button>
-        <button type="button" class="tab" data-view="archive" data-i18n="tabArchive">Archivo</button>
+        <button type="button" class="tab active" data-view="submit" data-i18n="tabAdd">Add object</button>
+        <button type="button" class="tab" data-view="archive" data-i18n="tabArchive">Archive</button>
       </nav>
     </div>
   </header>
@@ -35,16 +34,16 @@
   <main class="wrap">
     <section id="view-submit" class="view active-view">
       <div class="card intro-card">
-        <h2 data-i18n="registerTitle">Registrar un objeto</h2>
-        <p data-i18n="registerIntro">Completa los tres campos. La fotografía y la memoria quedarán asociadas a la fecha y al lugar indicados.</p>
+        <h2 data-i18n="registerTitle">Register an object</h2>
+        <p data-i18n="registerIntro">Complete the three fields. The photograph and memory will be associated with the stated place and date.</p>
       </div>
 
       <form id="object-form" class="card form-card">
         <div class="field-group">
           <div class="field-number">1</div>
           <div class="field-content">
-            <label for="photo" data-i18n="photoLabel">Fotografía del objeto</label>
-            <p class="hint" data-i18n="photoHint">JPG, PNG o WEBP. Máximo 8 MB.</p>
+            <label for="photo" data-i18n="photoLabel">Photograph of the object</label>
+            <p class="hint" data-i18n="photoHint">JPG, PNG or WEBP. Maximum 8 MB.</p>
             <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required>
             <div id="photo-preview" class="photo-preview hidden"></div>
           </div>
@@ -53,11 +52,11 @@
         <div class="field-group">
           <div class="field-number">2</div>
           <div class="field-content">
-            <label for="memory" data-i18n="memoryLabel">Historia o memoria del objeto</label>
-            <p class="hint" data-i18n="memoryHint">Puedes escribirla aquí o cargar un archivo de texto (.txt o .md).</p>
+            <label for="memory" data-i18n="memoryLabel">Story or memory of the object</label>
+            <p class="hint" data-i18n="memoryHint">Write it here or load a text file (.txt or .md).</p>
             <textarea id="memory" name="memory" rows="9" maxlength="10000" required></textarea>
             <div class="inline-row">
-              <label class="file-button" for="memory-file" data-i18n="loadText">Cargar texto</label>
+              <label class="file-button" for="memory-file" data-i18n="loadText">Load text</label>
               <input id="memory-file" class="visually-hidden" type="file" accept=".txt,.md,text/plain,text/markdown">
               <span id="memory-file-name" class="hint"></span>
             </div>
@@ -67,14 +66,14 @@
         <div class="field-group">
           <div class="field-number">3</div>
           <div class="field-content">
-            <label data-i18n="placeDateLabel">Lugar y fecha</label>
+            <label data-i18n="placeDateLabel">Place and date</label>
             <div class="two-columns">
               <div>
-                <label class="sub-label" for="place" data-i18n="placeLabel">Lugar</label>
+                <label class="sub-label" for="place" data-i18n="placeLabel">Place</label>
                 <input id="place" name="place" type="text" maxlength="200" required>
               </div>
               <div>
-                <label class="sub-label" for="memory-date" data-i18n="dateLabel">Fecha</label>
+                <label class="sub-label" for="memory-date" data-i18n="dateLabel">Date</label>
                 <input id="memory-date" name="memory-date" type="date" required>
               </div>
             </div>
@@ -82,61 +81,61 @@
         </div>
 
         <div class="form-actions">
-          <button class="primary-button" type="submit" id="submit-button" data-i18n="save">Guardar en el archivo</button>
+          <button class="primary-button" type="submit" id="submit-button" data-i18n="save">Save to the archive</button>
           <span id="form-status" class="status" role="status" aria-live="polite"></span>
         </div>
-        <p class="privacy-note" data-i18n="privacyNote">Para permitirte borrar tus propios envíos sin pedirte una cuenta, este sitio usa una identidad anónima vinculada a este navegador. Si borras los datos del sitio o cambias de dispositivo, no podrás recuperar esos envíos desde ese nuevo dispositivo.</p>
+        <p class="privacy-note" data-i18n="privacyNote">To let you delete your own submissions without requiring an account, this site uses an anonymous identity linked to this browser. If you clear site data or switch devices, you will not be able to recover those submissions from the new device.</p>
       </form>
     </section>
 
     <section id="view-archive" class="view" hidden>
       <div class="archive-heading">
         <div>
-          <h2 data-i18n="archiveTitle">Archivo de objetos</h2>
-          <p id="archive-count" class="hint" data-i18n="loading">Cargando…</p>
+          <h2 data-i18n="archiveTitle">Archive de objetos</h2>
+          <p id="archive-count" class="hint" data-i18n="loading">Loading…</p>
         </div>
         <div class="search-box">
-          <label class="visually-hidden" for="search" data-i18n="searchLabel">Buscar</label>
+          <label class="visually-hidden" for="search" data-i18n="searchLabel">Search</label>
           <input id="search" type="search">
         </div>
       </div>
       <div id="gallery" class="gallery" aria-live="polite"></div>
       <div id="empty-state" class="card empty-state hidden">
-        <h3 data-i18n="emptyTitle">Aún no hay objetos archivados</h3>
-        <p data-i18n="emptyText">Cuando alguien complete el formulario, aparecerá aquí.</p>
+        <h3 data-i18n="emptyTitle">There are no archived objects yet</h3>
+        <p data-i18n="emptyText">When someone completes the form, it will appear here.</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <span data-i18n="footer">Archivo de objetos y memorias</span>
-      <button type="button" class="admin-link footer-admin" id="admin-open-footer" data-i18n="adminAccess">Administración</button>
+      <span data-i18n="footer">Archive de objetos y memorias</span>
+      <button type="button" class="admin-link footer-admin" id="admin-open-footer" data-i18n="adminAccess">Administration</button>
     </div>
   </footer>
 
   <div id="admin-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
     <div class="modal-backdrop" data-close-admin></div>
     <div class="modal-card">
-      <button type="button" class="modal-close" id="admin-close" aria-label="Cerrar">×</button>
+      <button type="button" class="modal-close" id="admin-close" aria-label="Close">×</button>
       <div id="admin-login-view">
-        <p class="eyebrow" data-i18n="adminEyebrow">ÁREA RESTRINGIDA</p>
-        <h2 id="admin-modal-title" data-i18n="adminTitle">Acceso administrativo</h2>
-        <p class="modal-copy" data-i18n="adminIntro">Los administradores pueden eliminar cualquier objeto del archivo.</p>
+        <p class="eyebrow" data-i18n="adminEyebrow">RESTRICTED AREA</p>
+        <h2 id="admin-modal-title" data-i18n="adminTitle">Administrative access</h2>
+        <p class="modal-copy" data-i18n="adminIntro">Administrators can delete any object from the archive.</p>
         <form id="admin-login-form" class="admin-form">
-          <label for="admin-email" data-i18n="emailLabel">Correo electrónico</label>
+          <label for="admin-email" data-i18n="emailLabel">Email address</label>
           <input id="admin-email" type="email" autocomplete="username" required>
-          <label for="admin-password" data-i18n="passwordLabel">Contraseña</label>
+          <label for="admin-password" data-i18n="passwordLabel">Password</label>
           <input id="admin-password" type="password" autocomplete="current-password" required>
-          <button class="primary-button" type="submit" id="admin-login-button" data-i18n="login">Entrar</button>
+          <button class="primary-button" type="submit" id="admin-login-button" data-i18n="login">Sign in</button>
           <p id="admin-status" class="status" role="status" aria-live="polite"></p>
         </form>
       </div>
       <div id="admin-session-view" class="hidden">
-        <p class="eyebrow" data-i18n="adminSessionEyebrow">ADMINISTRACIÓN ACTIVA</p>
-        <h2 data-i18n="adminSignedIn">Sesión administrativa iniciada</h2>
+        <p class="eyebrow" data-i18n="adminSessionEyebrow">ADMINISTRATION ACTIVE</p>
+        <h2 data-i18n="adminSignedIn">Administrative session active</h2>
         <p id="admin-session-email" class="modal-copy"></p>
-        <button type="button" class="secondary-button" id="admin-logout" data-i18n="logout">Cerrar sesión</button>
+        <button type="button" class="secondary-button" id="admin-logout" data-i18n="logout">Sign out</button>
       </div>
     </div>
   </div>

@@ -1,37 +1,249 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Generar QR — Archivo de objetos</title>
+  <meta name="description" content="QR generator for accessing the Objects and Memories Archive.">
+  <title>QR — Objects and memories archive</title>
   <style>
-    body{font-family:system-ui,sans-serif;background:#f6f2ea;color:#2d2a25;margin:0;padding:30px}
-    main{max-width:700px;margin:auto;background:#fffdf8;border:1px solid #ddd5c8;border-radius:16px;padding:28px}
-    input{width:100%;padding:12px;border:1px solid #cfc5b6;border-radius:8px;box-sizing:border-box}
-    button{margin-top:12px;padding:12px 16px;border:0;border-radius:8px;background:#6b4f32;color:white;cursor:pointer}
-    #qrcode{margin-top:24px;text-align:center}
-    #qrcode img{max-width:100%}
-    .hint{color:#6f685f}
+    :root{
+      --paper:#f6f2ea;--card:#fffdf8;--ink:#2d2a25;--muted:#6f685f;
+      --line:#ddd5c8;--accent:#6b4f32;--accent-dark:#553d25;--soft:#eee7dc;
+    }
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:28px 16px}
+    main{max-width:780px;margin:0 auto}
+    .topline{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:18px}
+    a{color:var(--accent);font-weight:700;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .eyebrow{letter-spacing:.14em;font-size:.76rem;font-weight:800;color:var(--muted);margin:0 0 8px}
+    h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3rem);line-height:1.05;margin:0 0 10px}
+    .lead{color:var(--muted);font-size:1.05rem;line-height:1.6;margin-top:0}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(45,42,37,.06)}
+    label{display:block;font-weight:750;margin:0 0 8px}
+    .url-row{display:grid;grid-template-columns:1fr auto;gap:10px}
+    input{width:100%;padding:13px 14px;border:1px solid #cfc5b6;border-radius:10px;background:#fff;font:inherit;color:var(--ink)}
+    input:focus{outline:3px solid rgba(107,79,50,.16);border-color:var(--accent)}
+    button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:13px 16px;cursor:pointer}
+    .primary{background:var(--accent);color:#fff}.primary:hover{background:var(--accent-dark)}
+    .secondary{background:var(--soft);color:var(--ink)}
+    .secondary:hover{background:#e5dccf}
+    .hint{color:var(--muted);font-size:.92rem;line-height:1.55}
+    #result{display:none;margin-top:22px;border-top:1px solid var(--line);padding-top:22px}
+    .qr-stage{background:#fff;padding:20px;border-radius:14px;display:flex;justify-content:center;align-items:center;min-height:320px;border:1px solid var(--line)}
+    #qrcode{width:280px;min-height:280px;display:flex;align-items:center;justify-content:center}
+    #qrcode img,#qrcode canvas{max-width:100%;height:auto;display:block}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .notice{background:#f0eadf;border-left:4px solid var(--accent);padding:12px 14px;border-radius:8px;color:var(--ink);line-height:1.5;margin-top:16px}
+    .print-card{display:none}
+    footer{color:var(--muted);font-size:.86rem;text-align:center;margin-top:18px}
+    @media(max-width:640px){
+      .topline{align-items:flex-start}.url-row{grid-template-columns:1fr}.url-row button{width:100%}
+      .card{padding:18px}.qr-stage{min-height:300px}
+    }
+    @media print{
+      body{background:#fff;padding:0}
+      main,.topline,footer{display:none!important}
+      .print-card{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:28px}
+      .print-sheet{width:100%;max-width:760px;border:1px solid #222;padding:40px;text-align:center}
+      .print-sheet h1{font-family:Georgia,serif;margin:0 0 8px;font-size:36px}
+      .print-sheet p{margin:0 auto 18px;max-width:560px;line-height:1.5}
+      .print-qr img{width:360px;max-width:80vw;display:block;margin:22px auto}
+      .print-url{font-size:12px;word-break:break-all}
+    }
   </style>
 </head>
 <body>
-<main>
-  <h1>Generar el QR del archivo</h1>
-  <p class="hint">Introduce la URL pública de tu página principal después de publicarla.</p>
-  <label for="url">URL</label>
-  <input id="url" type="url" placeholder="https://tu-sitio.example.com/">
-  <button id="generate">Generar QR</button>
-  <div id="qrcode"></div>
-</main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-  document.getElementById('generate').onclick = () => {
-    const url = document.getElementById('url').value.trim();
-    if (!/^https?:\/\//i.test(url)) return alert('Introduce una URL pública válida.');
-    const box = document.getElementById('qrcode');
-    box.innerHTML = '';
-    new QRCode(box, { text: url, width: 280, height: 280, correctLevel: QRCode.CorrectLevel.H });
-  };
-</script>
+  <main>
+    <div class="topline">
+      <a href="./" id="back-link">← <span id="back-label">Back to archive</span></a>
+      <div aria-label="Language">
+        <button class="secondary" type="button" data-lang="en">EN</button>
+        <button class="secondary" type="button" data-lang="de">DE</button>
+      </div>
+    </div>
+
+    <p class="eyebrow" id="eyebrow">QR ACCESS</p>
+    <h1 id="title">Generate the archive QR code</h1>
+    <p class="lead" id="lead">Create the code that people will scan with their phone to open the site directly.</p>
+
+    <section class="card" aria-labelledby="url-label">
+      <label id="url-label" for="url">Public site address</label>
+      <div class="url-row">
+        <input id="url" type="url" inputmode="url" autocomplete="url" placeholder="https://tu-sitio.pages.dev/">
+        <button class="primary" id="generate" type="button">Generate QR</button>
+      </div>
+      <p class="hint" id="hint">If this page is already published, we will try to fill in the main site address automatically.</p>
+
+      <div id="message" class="notice" hidden role="status" aria-live="polite"></div>
+
+      <div id="result" aria-live="polite">
+        <div class="qr-stage"><div id="qrcode" aria-label="Generated QR code"></div></div>
+        <div class="actions">
+          <button class="primary" id="download" type="button">Download QR</button>
+          <button class="secondary" id="print" type="button">Print</button>
+          <button class="secondary" id="copy" type="button">Copy URL</button>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer">The QR contains only the public address of the site.</footer>
+  </main>
+
+  <section class="print-card" aria-hidden="true">
+    <div class="print-sheet">
+      <p class="eyebrow">ARCHIVO COLABORATIVO</p>
+      <h1 id="print-title">Scan to enter the archive</h1>
+      <p id="print-subtitle">Discover and share the stories and memories of objects.</p>
+      <div class="print-qr" id="print-qr"></div>
+      <div class="print-url" id="print-url"></div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const translations = {
+      en: {
+        back:'Back to archive', eyebrow:'QR ACCESS', title:'Generate the archive QR code', lead:'Create the code that people will scan with their phone to open the site directly.',
+        label:'Public site address', placeholder:'https://your-site.pages.dev/', generate:'Generate QR', hint:'If this page is already published, we will try to fill in the main site address automatically.',
+        download:'Download QR', print:'Print', copy:'Copy URL', footer:'The QR contains only the public address of the site.', invalid:'Enter a valid public URL beginning with http:// or https://.', generated:'QR generated successfully.', copied:'URL copied.', copyFailed:'The URL could not be copied automatically.', printTitle:'Scan to enter the archive', printSubtitle:'Discover and share the stories and memories of objects.'
+      },
+      de: {
+        back:'Zurück zum Archiv', eyebrow:'QR-ZUGANG', title:'QR-Code für das Archiv erstellen', lead:'Erstelle den Code, den Besucher mit ihrem Telefon scannen, um die Website direkt zu öffnen.',
+        label:'Öffentliche Website-Adresse', placeholder:'https://deine-seite.pages.dev/', generate:'QR erstellen', hint:'Wenn diese Seite bereits veröffentlicht ist, versuchen wir, die Hauptadresse der Website automatisch einzutragen.',
+        download:'QR herunterladen', print:'Drucken', copy:'URL kopieren', footer:'Der QR-Code enthält nur die öffentliche Adresse der Website.', invalid:'Gib eine gültige öffentliche URL ein, die mit http:// oder https:// beginnt.', generated:'QR-Code erfolgreich erstellt.', copied:'URL kopiert.', copyFailed:'Die URL konnte nicht automatisch kopiert werden.', printTitle:'Scannen, um das Archiv zu öffnen', printSubtitle:'Entdecke und teile die Geschichten und Erinnerungen der Objekte.'
+      }
+    };
+
+    let lang = ['en', 'de'].includes(localStorage.getItem('archiveLanguage')) ? localStorage.getItem('archiveLanguage') : 'en';
+    let currentUrl = '';
+
+    const $ = (id) => document.getElementById(id);
+
+    function t(key) { return translations[lang][key] || translations.en[key] || key; }
+
+    function applyLanguage(next) {
+      lang = translations[next] ? next : 'en';
+      localStorage.setItem('archiveLanguage', lang);
+      document.documentElement.lang = lang;
+      $('back-label').textContent = t('back');
+      $('eyebrow').textContent = t('eyebrow');
+      $('title').textContent = t('title');
+      $('lead').textContent = t('lead');
+      $('url-label').textContent = t('label');
+      $('url').placeholder = t('placeholder');
+      $('generate').textContent = t('generate');
+      $('hint').textContent = t('hint');
+      $('download').textContent = t('download');
+      $('print').textContent = t('print');
+      $('copy').textContent = t('copy');
+      $('footer').textContent = t('footer');
+      $('print-title').textContent = t('printTitle');
+      $('print-subtitle').textContent = t('printSubtitle');
+      document.querySelectorAll('[data-lang]').forEach(btn => {
+        btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));
+      });
+      if (currentUrl) showMessage(t('generated'), false);
+    }
+
+    function inferSiteUrl() {
+      const loc = new URL(window.location.href);
+      if (/\/qr\.html$/i.test(loc.pathname)) {
+        loc.pathname = loc.pathname.replace(/\/qr\.html$/i, '/') || '/';
+      }
+      loc.search = '';
+      loc.hash = '';
+      return loc.toString();
+    }
+
+    function validUrl(value) {
+      try {
+        const u = new URL(value);
+        return /^https?:$/.test(u.protocol);
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function showMessage(message, isError = false) {
+      const box = $('message');
+      box.hidden = false;
+      box.textContent = message;
+      box.style.borderLeftColor = isError ? '#9b3d2e' : 'var(--accent)';
+    }
+
+    function clearMessage() { $('message').hidden = true; }
+
+    function qrCanvasOrImg() {
+      const canvas = $('qrcode').querySelector('canvas');
+      if (canvas) return canvas;
+      const img = $('qrcode').querySelector('img');
+      return img || null;
+    }
+
+    function generate() {
+      clearMessage();
+      const url = $('url').value.trim();
+      if (!validUrl(url)) {
+        showMessage(t('invalid'), true);
+        $('url').focus();
+        return;
+      }
+      currentUrl = url;
+      $('qrcode').innerHTML = '';
+      new QRCode($('qrcode'), {
+        text: url,
+        width: 280,
+        height: 280,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      $('result').style.display = 'block';
+      $('print-url').textContent = url;
+      $('print-qr').innerHTML = '';
+      new QRCode($('print-qr'), {text:url, width:360, height:360, correctLevel:QRCode.CorrectLevel.H});
+      showMessage(t('generated'));
+    }
+
+    $('generate').addEventListener('click', generate);
+    $('url').addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+
+    $('download').addEventListener('click', () => {
+      if (!currentUrl) return generate();
+      const el = qrCanvasOrImg();
+      if (!el) return;
+      if (el.tagName === 'CANVAS') {
+        const a = document.createElement('a');
+        a.download = 'archivo-objetos-qr.png';
+        a.href = el.toDataURL('image/png');
+        a.click();
+      } else {
+        const a = document.createElement('a');
+        a.download = 'archivo-objetos-qr.png';
+        a.href = el.src;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.click();
+      }
+    });
+
+    $('print').addEventListener('click', () => window.print());
+
+    $('copy').addEventListener('click', async () => {
+      if (!currentUrl) return generate();
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        showMessage(t('copied'));
+      } catch (_) {
+        showMessage(t('copyFailed'), true);
+      }
+    });
+
+    document.querySelectorAll('[data-lang]').forEach(btn => {
+      btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+    });
+
+    $('url').value = inferSiteUrl();
+    applyLanguage(lang);
+  </script>
 </body>
 </html>

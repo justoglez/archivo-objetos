@@ -19,38 +19,6 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 const translations = {
-  es: {
-    eyebrow: 'ARCHIVO COLABORATIVO', title: 'Objetos y memorias',
-    subtitle: 'Conserva la historia de un objeto y compártela con la comunidad.',
-    tabAdd: 'Añadir objeto', tabArchive: 'Archivo', adminAccess: 'Administración',
-    registerTitle: 'Registrar un objeto',
-    registerIntro: 'Completa los tres campos. La fotografía y la memoria quedarán asociadas a la fecha y al lugar indicados.',
-    photoLabel: 'Fotografía del objeto', photoHint: 'JPG, PNG o WEBP. Máximo 8 MB.',
-    memoryLabel: 'Historia o memoria del objeto',
-    memoryHint: 'Puedes escribirla aquí o cargar un archivo de texto (.txt o .md).',
-    loadText: 'Cargar texto', placeDateLabel: 'Lugar y fecha', placeLabel: 'Lugar', dateLabel: 'Fecha',
-    save: 'Guardar en el archivo', privacyNote: 'Para permitirte borrar tus propios envíos sin pedirte una cuenta, este sitio usa una identidad anónima vinculada a este navegador. Si borras los datos del sitio o cambias de dispositivo, no podrás recuperar esos envíos desde ese nuevo dispositivo.',
-    archiveTitle: 'Archivo de objetos', loading: 'Cargando…', searchLabel: 'Buscar',
-    searchPlaceholder: 'Buscar por lugar o memoria…', emptyTitle: 'Aún no hay objetos archivados',
-    emptyText: 'Cuando alguien complete el formulario, aparecerá aquí.',
-    footer: 'Archivo de objetos y memorias', adminEyebrow: 'ÁREA RESTRINGIDA',
-    adminTitle: 'Acceso administrativo', adminIntro: 'Los administradores pueden eliminar cualquier objeto del archivo.',
-    emailLabel: 'Correo electrónico', passwordLabel: 'Contraseña', login: 'Entrar',
-    adminSessionEyebrow: 'ADMINISTRACIÓN ACTIVA', adminSignedIn: 'Sesión administrativa iniciada', logout: 'Cerrar sesión',
-    saveLoading: 'Guardando…', saved: 'El objeto fue guardado en el archivo.',
-    fillAll: 'Completa todos los campos.', photoTooBig: 'La fotografía supera el límite de 8 MB.',
-    textTooBig: 'El archivo de texto supera el límite de 200 KB.', textReadError: 'No se pudo leer el archivo de texto.',
-    photoPreviewAlt: 'Vista previa del objeto', submitError: 'No se pudo guardar el objeto.',
-    archiveLoadError: 'No se pudo cargar el archivo.', oneObject: 'objeto archivado', manyObjects: 'objetos archivados',
-    memoryTitle: 'Memoria del objeto', delete: 'Eliminar', own: 'Tu objeto', admin: 'Administrador',
-    deleteConfirm: '¿Quieres eliminar este objeto y su fotografía del archivo? Esta acción no se puede deshacer.',
-    deleteLoading: 'Eliminando…', deleteSuccess: 'El objeto fue eliminado.', deleteError: 'No se pudo eliminar el objeto.',
-    myObject: 'Objeto subido por ti', adminObject: 'Eliminación administrativa', loginNeeded: 'Inicia sesión como administrador para usar esta función.',
-    invalidCredentials: 'No se pudo iniciar la sesión. Comprueba el correo y la contraseña.', notAdmin: 'La cuenta ha iniciado sesión, pero no tiene permisos administrativos.',
-    loggedOut: 'Sesión administrativa cerrada.', authError: 'No se pudo crear la identidad anónima de este navegador. Revisa que Anonymous Sign-Ins esté habilitado en Supabase.',
-    configError: 'Falta configurar config.js con la URL y la Publishable key de Supabase.',
-    publicPhotoAlt: 'Fotografía del objeto archivado', close: 'Cerrar'
-  },
   en: {
     eyebrow: 'COLLABORATIVE ARCHIVE', title: 'Objects and memories',
     subtitle: 'Preserve the story of an object and share it with the community.',
@@ -136,15 +104,15 @@ const adminClose = document.getElementById('admin-close');
 const adminLogout = document.getElementById('admin-logout');
 
 let archiveItems = [];
-let currentLang = localStorage.getItem('objectsArchiveLang') || 'es';
+let currentLang = ['en', 'de'].includes(localStorage.getItem('objectsArchiveLang')) ? localStorage.getItem('objectsArchiveLang') : 'en';
 let currentUser = null;
 let isAdmin = false;
 let authReady = false;
 
-function t(key) { return translations[currentLang][key] ?? translations.es[key] ?? key; }
+function t(key) { return translations[currentLang][key] ?? translations.en[key] ?? key; }
 function setStatus(message, kind = '') { formStatus.textContent = message; formStatus.className = `status ${kind}`.trim(); }
 function setAdminStatus(message, kind = '') { adminStatus.textContent = message; adminStatus.className = `status ${kind}`.trim(); }
-function escapeDateLocale() { return currentLang === 'en' ? 'en-US' : currentLang === 'de' ? 'de-DE' : 'es-ES'; }
+function escapeDateLocale() { return currentLang === 'de' ? 'de-DE' : 'en-US'; }
 function formatDate(dateString) {
   const d = new Date(`${dateString}T00:00:00`);
   return new Intl.DateTimeFormat(escapeDateLocale(), { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
@@ -155,13 +123,13 @@ function safeFileName(name) {
 function isAnonymousUser(user = currentUser) { return !!user?.is_anonymous; }
 
 function applyLanguage(lang) {
-  if (!translations[lang]) lang = 'es';
+  if (!translations[lang]) lang = 'en';
   currentLang = lang;
   localStorage.setItem('objectsArchiveLang', lang);
   document.documentElement.lang = lang;
   document.title = t('title');
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-  const placeholders = { memory: currentLang === 'es' ? '¿Qué es el objeto? ¿De quién era? ¿Qué recuerdas de él?' : currentLang === 'en' ? 'What is the object? Who did it belong to? What do you remember about it?' : 'Was ist der Gegenstand? Wem gehörte er? Woran erinnerst du dich?' , place: currentLang === 'es' ? 'Ej. Centro Habana' : currentLang === 'en' ? 'E.g. Havana' : 'Z. B. Havanna' };
+  const placeholders = { memory: currentLang === 'de' ? 'Was ist der Gegenstand? Wem gehörte er? Woran erinnerst du dich?' : 'What is the object? Who did it belong to? What do you remember about it?', place: currentLang === 'de' ? 'z. B. Berlin' : 'E.g. New York' };
   document.getElementById('memory').placeholder = placeholders.memory;
   document.getElementById('place').placeholder = placeholders.place;
   searchInput.placeholder = t('searchPlaceholder');
