@@ -20,7 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 
 const translations = {
   en: {
-    eyebrow: 'COLLABORATIVE ARCHIVE', title: 'Objects and memories',
+    eyebrow: 'COLLABORATIVE ARCHIVE', title: 'Ánima: The Inner Landscape',
     subtitle: 'Preserve the story of an object and share it with the community.',
     tabAdd: 'Add object', tabArchive: 'Archive', adminAccess: 'Administration',
     registerTitle: 'Register an object',
@@ -48,7 +48,7 @@ const translations = {
     configError: 'Configure config.js with your Supabase URL and Publishable key.', publicPhotoAlt: 'Photograph of archived object', close: 'Close'
   },
   de: {
-    eyebrow: 'KOLLABORATIVES ARCHIV', title: 'Objekte und Erinnerungen',
+    eyebrow: 'KOLLABORATIVES ARCHIV', title: 'Ánima: Die innere Landschaft',
     subtitle: 'Bewahre die Geschichte eines Gegenstands und teile sie mit der Gemeinschaft.',
     tabAdd: 'Objekt hinzufügen', tabArchive: 'Archiv', adminAccess: 'Administration',
     registerTitle: 'Objekt registrieren',
@@ -129,7 +129,7 @@ function applyLanguage(lang) {
   document.documentElement.lang = lang;
   document.title = t('title');
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-  const placeholders = { memory: currentLang === 'de' ? 'Was ist der Gegenstand? Wem gehörte er? Woran erinnerst du dich?' : 'What is the object? Who did it belong to? What do you remember about it?', place: currentLang === 'de' ? 'z. B. Berlin' : 'E.g. New York' };
+  const placeholders = { memory: currentLang === 'de' ? "Was ist der Gegenstand? Wem gehörte er? Woran erinnerst du dich? Was repräsentiert dieses Objekt in Bezug auf Ihre eigene Geschichte oder die von jemand anderem oder einen bestimmten Kontext?" : "What is the object? Who did it belong to? What do you remember about it? What does that object represent regarding your own or someone else's history, or a particular context?", place: currentLang === 'de' ? 'z. B. Berlin' : 'E.g. New York' };
   document.getElementById('memory').placeholder = placeholders.memory;
   document.getElementById('place').placeholder = placeholders.place;
   searchInput.placeholder = t('searchPlaceholder');
